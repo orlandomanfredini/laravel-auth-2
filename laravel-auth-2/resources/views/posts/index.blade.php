@@ -14,7 +14,7 @@
                             {{$post->content}}
                         </div>
                         <button class="btn btn-primary">
-                            <a class="text-white" href="#">Visualizza</a>
+                            <a class="text-white" href="{{route('admin.posts.show', $post)}}">Visualizza</a>
                         </button>
                     </div>
                    </div>
