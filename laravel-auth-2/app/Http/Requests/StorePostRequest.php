@@ -11,7 +11,7 @@ class StorePostRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,8 @@ class StorePostRequest extends FormRequest
     {
         return [
             //
+            'title' => 'required|max:100',
+            'content' => 'nullable|max:170',
         ];
     }
 }

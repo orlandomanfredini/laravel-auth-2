@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdatePostRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdatePostRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +24,9 @@ class UpdatePostRequest extends FormRequest
     {
         return [
             //
+            'title'=> 'required|max:255|string',
+            'slug' => ['required', 'max:255', Rule::unique('posts')->ignore($this->post)],
+            'content'=> 'nullable|max:300|string'
         ];
     }
 }

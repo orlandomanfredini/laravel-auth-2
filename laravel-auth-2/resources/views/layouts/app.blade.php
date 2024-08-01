@@ -46,6 +46,7 @@
                         <li class="nav-item d-flex ">
                             <a class="nav-link" href="{{url('/') }}">{{ __('Home') }}</a>
                             <a class="nav-link" href="{{route('admin.posts.index') }}">{{ __('Post') }}</a>
+                            <a class="nav-link text-primary" href="{{route('admin.posts.create') }}">{{ __('Aggiungi post') }}</a>
                         </li>
                     </ul>
 

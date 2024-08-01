@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
@@ -25,14 +29,47 @@ class PostController extends Controller
     public function create()
     {
         //
+        return view('posts.create');
+        
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
         //
+        // $request->validate([
+        //     'title' => 'required|max:100',
+        //     'content' => 'nullable|max:170',
+
+        // ]);
+
+        $request->validated();
+
+        $form_data = $request->all();
+
+        $base_slug = Str::slug($form_data['title']);
+        $slug = $base_slug;
+        $n= 0;
+
+        do{
+            $find=Post::where('slug', $slug)->first();
+
+            if($find !== null){
+                $n++;
+
+                $slug = $base_slug . '-' . $n;
+            }
+        }while($find !== null);
+        // dd($form_data);
+        $form_data['slug'] = $slug;
+
+        $post = Post::create($form_data);
+        $post->save();
+
+        return to_route('admin.posts.show', compact('post'));
     }
 
     /**
@@ -47,24 +84,47 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Post $post)
     {
-        //
+        return view('posts.edit', compact('post'));
+
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePostRequest $request, Post $post)
     {
         //
+
+        // $request->validate([
+        //     'title'=> 'required|max:255|string',
+        //     'slug' => ['required', 'max:255', Rule::unique('posts')->ignore($post->id)],
+        //     'content'=> 'nullable|max:300|string'
+        // ]);
+        $request->validated();
+
+        $form_data = $request->all();
+
+
+        $post->update($form_data);
+
+        return to_route('admin.posts.show', compact('post'));
+        
+
+        
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Post $post)
     {
         //
+
+        $post->delete();
+        return to_route('admin.posts.index');
     }
 }
