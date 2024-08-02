@@ -9,11 +9,14 @@
                     <div class="card-header text-danger">
                         {{$post->title}}
                     </div>
-                    <div class="card-header text-danger">
+                    <div class="card-header text-warning">
                         {{$post->slug}}
                     </div>
 
                     <div class="card-body">
+                        <div class="my-2 text-success">
+                            <strong>{{$post->resource ? $post->resource->name : 'Nessuna Risorsa'}}</strong>
+                        </div>
                         {{$post->content}}
                     </div>
                     <div class="d-flex justify-content-center gap-5">

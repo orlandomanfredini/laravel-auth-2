@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
+use App\Models\Resource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -29,7 +30,10 @@ class PostController extends Controller
     public function create()
     {
         //
-        return view('posts.create');
+
+        $resources = Resource::orderBy('name', 'asc')->get();
+
+        return view('posts.create', compact('resources'));
         
 
     }
@@ -86,7 +90,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.edit', compact('post'));
+        $resources = Resource::orderBy('name', 'asc')->get();
+        return view('posts.edit', compact('post', 'resources'));
 
 
     }

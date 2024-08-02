@@ -10,6 +10,10 @@ class Post extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title','slug', 'content'
+        'title','slug', 'content', 'resource_id'
     ];
+
+    public function resource(){
+        return $this->belongsTo(Resource::class);
+    }
 }

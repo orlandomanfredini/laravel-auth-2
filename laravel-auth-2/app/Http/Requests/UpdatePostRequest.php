@@ -26,7 +26,8 @@ class UpdatePostRequest extends FormRequest
             //
             'title'=> 'required|max:255|string',
             'slug' => ['required', 'max:255', Rule::unique('posts')->ignore($this->post)],
-            'content'=> 'nullable|max:300|string'
+            'content'=> 'nullable|max:300|string',
+            'resource_id' => 'nullable|exists:resources,id',
         ];
     }
 }

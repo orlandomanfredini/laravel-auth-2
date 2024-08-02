@@ -16,6 +16,15 @@
                 <input type="text" class="form-control" id="slug" name="slug" value="{{old('slug', $post->slug)}}"
                     placeholder="Inserisci titolo...">
             </div>
+            <div>
+                <label class="form-label" for="resource_id">Risorsa</label>
+                <select class="form-control" name="resource_id" id="resource_id">
+                    <option value="">--Nessuna Risorsa--</option>
+                    @foreach ($resources as $resource)
+                       <option @selected( $resource->id == old('resource_id')) value="{{$resource->id}}">{{$resource->name}}</option>
+                    @endforeach
+                </select>
+            </div>
             <div class="mb-3">
                 <label for="content" class="form-label">Content</label>
                 <textarea class="form-control" name="content" id="content"

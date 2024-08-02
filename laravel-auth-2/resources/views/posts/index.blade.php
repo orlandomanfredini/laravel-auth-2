@@ -10,7 +10,11 @@
                             <div class="card-header">
                                 {{$post->title}}
                             </div>
+
                             <div class="card-body">
+                                <div class="my-2">
+                                    <strong>{{$post->resource ? $post->resource->name : 'Nessuna Risorsa'}}</strong>
+                                </div>
                                 {{$post->content}}
                             </div>
                             <button class="btn btn-primary">
