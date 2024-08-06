@@ -16,4 +16,8 @@ class Post extends Model
     public function resource(){
         return $this->belongsTo(Resource::class);
     }
+
+    public function tags(){
+        return $this->belongsToMany(Tag::class);
+    }
 }

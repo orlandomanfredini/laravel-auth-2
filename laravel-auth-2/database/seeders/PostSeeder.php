@@ -2,11 +2,13 @@
 
 namespace Database\Seeders;
 use App\Models\Resource;
+use App\Models\Tag;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Post;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
+
 
 class PostSeeder extends Seeder
 {
@@ -17,8 +19,9 @@ class PostSeeder extends Seeder
     {
         //
         $resources = Resource::all();
-
         $resource_ids = $resources->pluck('id')->all();
+
+        $tag_ids = Tag::all()->pluck('id')->all();
 
         for($i = 0; $i < 50; $i++){
             $post= new Post();
@@ -30,6 +33,10 @@ class PostSeeder extends Seeder
             $post->resource_id = $faker->optional()->randomElement($resource_ids);
 
             $post->save();
+
+            $random_tags_id = $faker->randomElements($tag_ids, null);
+
+            $post->tags()->attach($random_tags_id);
 
         }
 
