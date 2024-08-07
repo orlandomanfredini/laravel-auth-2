@@ -7,7 +7,9 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\Resource;
+use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -33,7 +35,9 @@ class PostController extends Controller
 
         $resources = Resource::orderBy('name', 'asc')->get();
 
-        return view('posts.create', compact('resources'));
+        $tags = Tag::orderBy('name', 'asc')->get();
+
+        return view('posts.create', compact('resources', 'tags'));
         
 
     }
@@ -53,6 +57,10 @@ class PostController extends Controller
         $request->validated();
 
         $form_data = $request->all();
+      
+        $user_id = Auth::id();
+        // $user_id = Auth::user();
+        
 
         $base_slug = Str::slug($form_data['title']);
         $slug = $base_slug;
@@ -70,8 +78,14 @@ class PostController extends Controller
         // dd($form_data);
         $form_data['slug'] = $slug;
 
+        $form_data['user_id']= $user_id;
+
         $post = Post::create($form_data);
         $post->save();
+
+        if($request->has('tags')){
+            $post->tags()->attach($request->tags);
+        }
 
         return to_route('admin.posts.show', compact('post'));
     }
@@ -90,8 +104,14 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+
+        if($post->user_id !== Auth::id()){
+            return to_route('admin.posts.index');
+        }
         $resources = Resource::orderBy('name', 'asc')->get();
-        return view('posts.edit', compact('post', 'resources'));
+
+        $tags= Tag::orderBy('name', 'asc')->get();
+        return view('posts.edit', compact('post', 'resources', 'tags'));
 
 
     }
@@ -108,12 +128,24 @@ class PostController extends Controller
         //     'slug' => ['required', 'max:255', Rule::unique('posts')->ignore($post->id)],
         //     'content'=> 'nullable|max:300|string'
         // ]);
+        if($post->user_id !== Auth::id()){
+            return to_route('admin.posts.index');
+        }
+
+
+
         $request->validated();
 
         $form_data = $request->all();
 
 
         $post->update($form_data);
+
+        if($request->has('tags')){
+            $post->tags()->sync($request->tags);
+        }else{
+            $post->tags()->detach();
+        }
 
         return to_route('admin.posts.show', compact('post'));
         
@@ -128,8 +160,13 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+        if($post->user_id !== Auth::id()){
+            return to_route('admin.posts.index');
+        }
 
         $post->delete();
+
+        
         return to_route('admin.posts.index');
     }
 }

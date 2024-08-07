@@ -17,20 +17,29 @@
                                 </div>
                                 {{$post->content}}
                             </div>
+                            <div class="my-3">
+                                <strong>Creato da:</strong>
+                                <span>{{$post->user->name}}</span>
+                            </div>
                             <button class="btn btn-primary">
                                 <a class="text-white" href="{{route('admin.posts.show', $post)}}">Visualizza</a>
                             </button>
                             <div class="d-flex align-items-center gap-2">
-                                <div class="mt-3">
-                                    <a class="btn btn-warning text-black"
-                                        href="{{route('admin.posts.edit', $post)}}">Modifica</a>
+                                <div class="mt-3 col-auto">
+                                    @if ($post->user_id === Auth::id())
+                                        <a class="btn btn-warning text-black"
+                                            href="{{route('admin.posts.edit', $post)}}">Modifica</a>
+                                    @endif
                                 </div>
-                                <form action="{{route('admin.posts.destroy', $post)}}" method="POST">
+                                <form action="{{route('admin.posts.destroy', $post)}}" method="POST" class="col-auto">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger">
-                                        Elimina
-                                    </button>
+                                    @if ($post->user_id === Auth::id())
+                                        <button class="btn btn-danger">
+                                            Elimina
+                                        </button>
+                                    @endif
+
                                 </form>
                             </div>
 

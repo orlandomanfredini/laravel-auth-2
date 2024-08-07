@@ -14,21 +14,41 @@
                     </div>
 
                     <div class="card-body">
-                        <div class="my-2 text-success">
-                            <strong>{{$post->resource ? $post->resource->name : 'Nessuna Risorsa'}}</strong>
+                        <div class="my-2">
+                            <h4 class="my-2">Resources</h4>
+                            <strong
+                                class="text-success">{{$post->resource ? $post->resource->name : 'Nessuna Risorsa'}}</strong>
                         </div>
-                        {{$post->content}}
+                        <div>
+                            <h4 class="my-2">Tags</h4>
+                            <ul class="d-flex gap-2 list-unstyled">
+                                @foreach ($post->tags as $tag)
+                                    <li>{{$tag->name}}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <div class="my-3">
+                            {{$post->content}}
+                        </div>
+                        <div class="my-3">
+                            <strong>Creato da:</strong>
+                            <span>{{$post->user->name}}</span>
+                        </div>
                     </div>
                     <div class="d-flex justify-content-center gap-5">
-                        <button class="btn btn-primary">
-                            <a class="text-white" href="{{route('admin.posts.edit', $post)}}">Modifica</a>
-                        </button>
+                        @if ($post->user_id === Auth::id())
+                            <button class="btn btn-primary">
+                                <a class="text-white" href="{{route('admin.posts.edit', $post)}}">Modifica</a>
+                            </button>
+                        @endif
                         <form action="{{route('admin.posts.destroy', $post)}}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-danger">
-                                Elimina
-                            </button>
+                            @if ($post->user_id === Auth::id())
+                                <button class="btn btn-danger">
+                                    Elimina
+                                </button>
+                            @endif
                         </form>
                     </div>
                 </div>

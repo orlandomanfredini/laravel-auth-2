@@ -10,7 +10,7 @@ class Post extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title','slug', 'content', 'resource_id'
+        'title','slug', 'content', 'resource_id', 'user_id'
     ];
 
     public function resource(){
@@ -20,4 +20,10 @@ class Post extends Model
     public function tags(){
         return $this->belongsToMany(Tag::class);
     }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+
 }

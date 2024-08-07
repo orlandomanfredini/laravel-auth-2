@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 use App\Models\Resource;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Post;
@@ -23,6 +24,8 @@ class PostSeeder extends Seeder
 
         $tag_ids = Tag::all()->pluck('id')->all();
 
+        $users = User::all()->pluck('id')->all();
+
         for($i = 0; $i < 50; $i++){
             $post= new Post();
             $title = $faker->sentence(5);
@@ -31,6 +34,7 @@ class PostSeeder extends Seeder
             $post->slug = Str::slug($title, '-');
             $post->content = $faker->text(170);
             $post->resource_id = $faker->optional()->randomElement($resource_ids);
+            $post->user_id = $faker->randomElement($users);
 
             $post->save();
 
