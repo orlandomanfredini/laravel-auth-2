@@ -169,4 +169,21 @@ class PostController extends Controller
         
         return to_route('admin.posts.index');
     }
+
+    public function toggleFavorite(Post $post){
+
+        // 
+        $user = Auth::user();
+
+        // dd($post);
+
+        if($user->isFavorite($post)){
+            $post->users()->detach($user->id);
+        }else{
+            $post->users()->attach($user->id);
+        }
+
+        return to_route('admin.posts.index');
+
+    }
 }

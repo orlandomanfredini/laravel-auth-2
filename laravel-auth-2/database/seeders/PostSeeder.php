@@ -40,7 +40,11 @@ class PostSeeder extends Seeder
 
             $random_tags_id = $faker->randomElements($tag_ids, null);
 
+            $random_users_id = $faker->randomElements($users, null);
+
             $post->tags()->attach($random_tags_id);
+
+            $post->users()->attach($random_users_id);
 
         }
 

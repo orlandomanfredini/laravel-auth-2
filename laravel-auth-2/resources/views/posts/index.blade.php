@@ -24,7 +24,7 @@
                             <button class="btn btn-primary">
                                 <a class="text-white" href="{{route('admin.posts.show', $post)}}">Visualizza</a>
                             </button>
-                            <div class="d-flex align-items-center gap-2">
+                            <div class="d-flex mt-3 justify-content-center">
                                 <div class="mt-3 col-auto">
                                     @if ($post->user_id === Auth::id())
                                         <a class="btn btn-warning text-black"
@@ -39,8 +39,19 @@
                                             Elimina
                                         </button>
                                     @endif
-
                                 </form>
+                                <div>
+                                    <form action="{{route('admin.posts.toggleFavorite',$post)}}" method="POST">
+                                        @csrf
+                                        <button class="border-0 bg-transparent">
+                                            @if (Auth::user()->isFavorite($post))
+                                                <i class="fa-solid fa-star text-warning fs-4"></i>
+                                            @else
+                                                <i class="fa-regular fa-star text-warning fs-4"></i>
+                                            @endif
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
 
                         </div>

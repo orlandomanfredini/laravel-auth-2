@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -45,5 +46,16 @@ class User extends Authenticatable
 
     public function posts(){
         return $this->hasMany(Post::class);
+    }
+
+    public function favoritePost(){
+        return $this->belongsToMany(Post::class);
+    }
+
+    // metodo per verificare che user corrente ha come favorito un determinato post
+    public function isFavorite(Post $post){
+        $finded = in_array($post->id, $this->favoritePost->pluck('id')->all());
+
+        return $finded;
     }
 }
